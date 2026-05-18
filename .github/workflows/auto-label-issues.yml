@@ -1,0 +1,99 @@
+name: Auto label issues
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+
+permissions:
+  issues: write
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply issue labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const text = `${issue.title}\n${issue.body ?? ""}`.toLowerCase();
+
+            const labelDefinitions = {
+              triage: {
+                color: "d4c5f9",
+                description: "Needs initial review and routing"
+              },
+              patent: {
+                color: "5319e7",
+                description: "Patent filing, prior-art, and IP strategy work"
+              },
+              research: {
+                color: "0052cc",
+                description: "Research and evidence-gathering work"
+              },
+              "go-to-market": {
+                color: "0e8a16",
+                description: "Launch strategy, packaging, and market readiness"
+              },
+              "product-discovery": {
+                color: "fbca04",
+                description: "Diagrams, prototyping, and discovery requirements"
+              }
+            };
+
+            const selected = new Set(["triage"]);
+
+            if (/\bpatent\b|\bcopyright\b|\bprior\s+art\b|\bintellectual\s+property\b|\bip\b\s+strategy\b|\bip\b\s+filing\b/.test(text)) {
+              selected.add("patent");
+            }
+
+            if (/\bresearch\b|\bwhitepaper\b|\bwhite\s+paper\b|\binvestigate\b|\banalysis\b/.test(text)) {
+              selected.add("research");
+            }
+
+            if (/\bship\b\s+to\s+market\b|\bgo\s+to\s+market\b|\blaunch\b|\bmarket\s+readiness\b/.test(text)) {
+              selected.add("go-to-market");
+            }
+
+            if (/\bfigma\b|\bdiagram\b|\b3d\b|\bprotocol\b|\btester\b|\btesting\s+team\b/.test(text)) {
+              selected.add("product-discovery");
+            }
+
+            for (const [name, meta] of Object.entries(labelDefinitions)) {
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name
+                });
+              } catch (error) {
+                if (error.status === 404) {
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name,
+                    color: meta.color,
+                    description: meta.description
+                  });
+                } else {
+                  throw error;
+                }
+              }
+            }
+
+            const existingLabels = issue.labels.map((label) =>
+              typeof label === "string" ? label : label.name
+            );
+
+            const labelsToAdd = [...selected].filter((label) => !existingLabels.includes(label));
+
+            if (labelsToAdd.length === 0) {
+              return;
+            }
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              labels: labelsToAdd
+            });
