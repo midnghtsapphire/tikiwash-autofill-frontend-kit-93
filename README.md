@@ -84,7 +84,7 @@ Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-trick
 
 This repository auto-labels new and updated issues to speed up triage:
 
-- `enhancement` (always applied)
+- `triage` (always applied)
 - `patent` for IP and filing strategy requests
 - `research` for research-heavy tasks
 - `go-to-market` for launch planning work

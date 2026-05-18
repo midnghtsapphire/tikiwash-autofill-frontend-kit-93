@@ -19,6 +19,10 @@ jobs:
             const text = `${issue.title}\n${issue.body ?? ""}`.toLowerCase();
 
             const labelDefinitions = {
+              triage: {
+                color: "d4c5f9",
+                description: "Needs initial review and routing"
+              },
               patent: {
                 color: "5319e7",
                 description: "Patent filing, prior-art, and IP strategy work"
@@ -37,21 +41,21 @@ jobs:
               }
             };
 
-            const selected = new Set(["enhancement"]);
+            const selected = new Set(["triage"]);
 
-            if (/\bpatent\b|\bcopyright\b|\bprior art\b|\bintellectual property\b|\bip strategy\b|\bip filing\b/.test(text)) {
+            if (/\bpatent\b|\bcopyright\b|\bprior\s+art\b|\bintellectual\s+property\b|\bip\s+strategy\b|\bip\s+filing\b/.test(text)) {
               selected.add("patent");
             }
 
-            if (/\bresearch\b|\bwhitepaper\b|\bpaper\b|\binvestigate\b|\banalysis\b/.test(text)) {
+            if (/\bresearch\b|\bwhitepaper\b|\bwhite\s+paper\b|\binvestigate\b|\banalysis\b/.test(text)) {
               selected.add("research");
             }
 
-            if (/\bship to market\b|\bgo to market\b|\blaunch\b|\bmarket\b/.test(text)) {
+            if (/\bship\s+to\s+market\b|\bgo\s+to\s+market\b|\blaunch\b|\bmarket\s+readiness\b/.test(text)) {
               selected.add("go-to-market");
             }
 
-            if (/figma|diagram|3d|protocol|tester|testing team/.test(text)) {
+            if (/\bfigma\b|\bdiagram\b|\b3d\b|\bprotocol\b|\btester\b|\btesting\s+team\b/.test(text)) {
               selected.add("product-discovery");
             }
 
