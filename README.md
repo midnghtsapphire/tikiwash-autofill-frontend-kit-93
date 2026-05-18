@@ -80,3 +80,12 @@ Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-trick
 |---------|--------|
 | Feature | ✅ Ready |
 
+## Issue labels
+
+This repository auto-labels new and updated issues to speed up triage:
+
+- `enhancement` (always applied)
+- `patent` for IP and filing strategy requests
+- `research` for research-heavy tasks
+- `go-to-market` for launch planning work
+- `product-discovery` for diagram/protocol/tester requirements
