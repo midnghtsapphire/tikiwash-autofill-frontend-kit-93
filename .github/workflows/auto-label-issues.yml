@@ -39,15 +39,15 @@ jobs:
 
             const selected = new Set(["enhancement"]);
 
-            if (/\bpatent\b|\bcopyright\b|\bprior art\b|\bintellectual property\b|\bip\b/.test(text)) {
+            if (/\bpatent\b|\bcopyright\b|\bprior art\b|\bintellectual property\b|\bip strategy\b|\bip filing\b/.test(text)) {
               selected.add("patent");
             }
 
-            if (/research|whitepaper|paper|investigate|analysis/.test(text)) {
+            if (/\bresearch\b|\bwhitepaper\b|\bpaper\b|\binvestigate\b|\banalysis\b/.test(text)) {
               selected.add("research");
             }
 
-            if (/ship to market|go to market|launch|market/.test(text)) {
+            if (/\bship to market\b|\bgo to market\b|\blaunch\b|\bmarket\b/.test(text)) {
               selected.add("go-to-market");
             }
 
