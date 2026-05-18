@@ -39,7 +39,7 @@ jobs:
 
             const selected = new Set(["enhancement"]);
 
-            if (/patent|copyright|prior art|intellectual property|ip\b/.test(text)) {
+            if (/\bpatent\b|\bcopyright\b|\bprior art\b|\bintellectual property\b|\bip\b/.test(text)) {
               selected.add("patent");
             }
 
@@ -77,9 +77,19 @@ jobs:
               }
             }
 
+            const existingLabels = issue.labels.map((label) =>
+              typeof label === "string" ? label : label.name
+            );
+
+            const labelsToAdd = [...selected].filter((label) => !existingLabels.includes(label));
+
+            if (labelsToAdd.length === 0) {
+              return;
+            }
+
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issue.number,
-              labels: [...selected]
+              labels: labelsToAdd
             });
