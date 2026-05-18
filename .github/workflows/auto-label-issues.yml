@@ -43,7 +43,7 @@ jobs:
 
             const selected = new Set(["triage"]);
 
-            if (/\bpatent\b|\bcopyright\b|\bprior\s+art\b|\bintellectual\s+property\b|\bip\s+strategy\b|\bip\s+filing\b/.test(text)) {
+            if (/\bpatent\b|\bcopyright\b|\bprior\s+art\b|\bintellectual\s+property\b|\bip\b\s+strategy\b|\bip\b\s+filing\b/.test(text)) {
               selected.add("patent");
             }
 
@@ -51,7 +51,7 @@ jobs:
               selected.add("research");
             }
 
-            if (/\bship\s+to\s+market\b|\bgo\s+to\s+market\b|\blaunch\b|\bmarket\s+readiness\b/.test(text)) {
+            if (/\bship\b\s+to\s+market\b|\bgo\s+to\s+market\b|\blaunch\b|\bmarket\s+readiness\b/.test(text)) {
               selected.add("go-to-market");
             }
 
